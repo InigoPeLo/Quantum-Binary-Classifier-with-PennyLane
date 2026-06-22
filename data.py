@@ -52,6 +52,31 @@ def get_data_xor(n_samples=200, seed=None):
     
     return X_train, X_test, y_train, y_test
 
+from sklearn.datasets import load_iris
+
+def get_data_iris(n_samples=None, seed=None):
+    from sklearn.datasets import load_iris
+    
+    data = load_iris()
+    X = data.data
+    y = data.target
+    
+    # Versicolor vs Virginica, son más parecidos
+    mask = y > 0
+    X = X[mask]
+    y = y[mask]
+    
+    # Convertir {1, 2} a {-1, +1}
+    y = (y - 1) * 2 - 1
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
+    
+    scaler = MinMaxScaler(feature_range=(0, np.pi))
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+    
+    return X_train, X_test, y_train, y_test
+
 
 #Función que llamamos desde train
 
@@ -62,3 +87,5 @@ def get_data(dataset="moons", n_samples=200, seed=None):
         return get_data_xor(n_samples=n_samples, seed=seed)
     elif dataset == "circle":
         return get_data_circ(n_samples=n_samples, seed=seed)
+    elif dataset== "iris":
+        return get_data_iris(n_samples=n_samples, seed=seed)
