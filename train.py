@@ -3,7 +3,7 @@ from circuito import circuito
 import pennylane as qml
 from pennylane import numpy as np
 import argparse
-from plot import plot_loss, plot_limite
+from plot import plot_loss, plot_limite, plot_dataset
 #Usamos una función loss, entropia cruzada no vale por usar valores entre -1 y +1
 
 def loss(theta, X, y):
@@ -50,18 +50,21 @@ if __name__ == "__main__":
     parser.add_argument("--epochs", type=int, default=50, help="Número de epochs")
     parser.add_argument("--layers", type=int, default=2, help="Número de capas del ansatz")
     parser.add_argument("--lr", type=float, default=0.1, help="Learning rate del optimizador Adam")
-    parser.add_argument("--dataset", type=str, default="moons", choices=["moons", "xor"], help="Dataset a usar", required=False)
+    parser.add_argument("--dataset", type=str, default="moons", choices=["moons", "xor", "circle"], help="Dataset a usar", required=False)
+    parser.add_argument("--seed", type=int, default=123, help="Semilla para la generación de datos", required=False)
+    parser.add_argument("--plot", type=bool, default=False, help="Si True plotea el dataset", required=False)
     args = parser.parse_args()
 
 
-    if args.dataset == "moons":
-        from data import get_data
-        X_train, X_test, y_train, y_test = get_data(seed=42)
-    elif args.dataset == "xor":
-        from data_xor import get_data_xor
-        X_train, X_test, y_train, y_test = get_data_xor(seed=42)
+    from data import get_data
+    X_train, X_test, y_train, y_test = get_data(dataset=args.dataset, seed=args.seed)
+
     theta, loss_hist = train(X_train, y_train, layers=args.layers, epochs=args.epochs, lr=args.lr)
     acc = accuracy(theta, X_test, y_test)
     print(f"Accuracy en test: {acc:.2%}")
     plot_loss(loss_hist)
     plot_limite(theta, X_test, y_test)
+
+    if args.plot:
+        plot_dataset(X_train, y_train, title=args.dataset)
+

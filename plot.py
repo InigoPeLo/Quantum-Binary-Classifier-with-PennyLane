@@ -30,4 +30,11 @@ def plot_limite(theta, X_test, y_test):
     plt.savefig("boundary.png")
     plt.close() 
 
-  
+def plot_dataset(X_train, y_train, title="Dataset"):
+    plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, edgecolors='k')
+    plt.title(title)
+    plt.xlabel("X_train")
+    plt.ylabel("y_train")
+    plt.savefig(f"{title}.png")
+    plt.close()
+
