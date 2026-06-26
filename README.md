@@ -108,6 +108,9 @@ python -m venv venv
 source venv/bin/activate
 pip install pennylane scikit-learn matplotlib numpy
 ```
+## Future plans
+
+- **Hybrid classical-quantum models via PyTorch** — integrate the VQC as a `torch.nn.Module` using `qml.qnn.TorchLayer`, enabling end-to-end hybrid architectures where classical layers (e.g. `nn.Linear`, CNNs) can preprocess or post-process the quantum circuit output. Example pipeline: a classical network reduces high-dimensional input → the VQC acts as a quantum feature extractor → a classical head performs the final classification. All components trained jointly with PyTorch's autograd.
 
 ## Dependencies
 
