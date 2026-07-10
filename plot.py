@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from circuito import circuito
 
 def plot_loss(loss_hist):
     plt.plot(loss_hist)
